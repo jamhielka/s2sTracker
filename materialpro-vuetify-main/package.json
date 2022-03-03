@@ -26,7 +26,13 @@
     "vuetify": "^2.3.14",
     "vuetify-datetime-picker": "^2.1.1",
     "vuex": "^3.5.1",
+<<<<<<< HEAD
     "vuex-persistedstate": "^4.0.0"
+=======
+    "vuex-persistedstate": "^4.0.0",
+    "vue-step-wizard": "^0.1.17",
+    "vue2-timepicker": "^1.1.6"
+>>>>>>> 361f3090f8b7b171368c82e50ef3b6c4e4d1fd9c
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.7",
@@ -59,4 +65,8 @@
     "> 1%",
     "last 2 versions"
   ]
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 361f3090f8b7b171368c82e50ef3b6c4e4d1fd9c
