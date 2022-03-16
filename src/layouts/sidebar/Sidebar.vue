@@ -19,7 +19,7 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title>{{ showItemState }}</v-list-item-title>
+          <v-list-item-title>Admin</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <!---USer Area -->
