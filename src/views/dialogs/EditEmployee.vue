@@ -1,5 +1,10 @@
 <template>
-  <form-wizard @onComplete="onComplete">
+<div>
+    <v-dialog v-model="dialog" max-width="100%">
+          <v-card>
+            <v-card-title class="text-h5">Employee</v-card-title>
+            <v-card-text>
+               <form-wizard @onComplete="onComplete">
     <tab-content title="Personal Information" :selected="true">
       <v-col cols="3">
         <div class="form-group">
@@ -557,6 +562,18 @@
       </div>
     </tab-content>
   </form-wizard>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" text @click="close()">Close</v-btn>
+
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+</div>
+
+
 </template>
 
 <script>
@@ -642,7 +659,7 @@ export default {
       selectedProvince: null,
     };
   },
-  props: ["data"],
+  props: ["data", "dialog"],
 
   created() {
     this.loadCountry();
@@ -652,7 +669,7 @@ export default {
   },
 
   watch: {
-    data: function () {
+    dialog: function () {
       console.log(this.$props.data);
       var xregion = this.$props.data.region;
       var xprovince = this.$props.data.province;
@@ -829,6 +846,9 @@ export default {
           console.log(e);
           //this.loadingBtn = false;
         });
+    },
+     close() {
+      this.$emit("close", false);
     },
   },
 };

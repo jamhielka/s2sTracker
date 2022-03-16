@@ -14,20 +14,12 @@
         <v-btn to="/addEmployee" color="primary" dark class="mb-2"
           >Add Employee</v-btn
         >
-        <v-dialog v-model="dialog" max-width="100%">
-          <v-card>
-            <v-card-title class="text-h5">Employee</v-card-title>
-            <v-card-text>
-              <EditDialog :data="approveData"></EditDialog>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Close</v-btn>
-
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+      
+              <EditDialog :data="approveData"
+              :dialog="editDialog.dialog"
+                @close="editDialog.dialog = !editDialog.dialog"
+              ></EditDialog>
+          
         <v-dialog v-model="dialogSchedule" max-width="500px">
           <v-card>
             <v-card-title class="text-h5">Set Schedule</v-card-title>
@@ -76,23 +68,25 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-               <v-btn color="blue darken-1" text @click="closeSched"
+              <v-btn color="blue darken-1" text @click="closeSched"
                 >Cancel</v-btn
               >
               <v-btn color="blue darken-1" text @click="SchedItemConfirm"
                 >OK</v-btn
               >
-            
+
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogDelete" max-width="500px">
           <v-card>
-            <v-card-title class="text-h5">Are you sure you want to delete?</v-card-title>
+            <v-card-title class="text-h5"
+              >Are you sure you want to delete?</v-card-title
+            >
             <v-card-actions>
               <v-spacer></v-spacer>
-               <v-btn color="blue darken-1" text @click="closeDelete"
+              <v-btn color="blue darken-1" text @click="closeDelete"
                 >Cancel</v-btn
               >
               <v-btn color="blue darken-1" text @click="deleteItemConfirm"
@@ -113,10 +107,7 @@
         <v-icon left> mdi-delete </v-icon>
         Delete
       </v-btn>
-      <v-btn x-small tile color="secondary" @click="scheduleItemX(item)">
-        <v-icon left> mdi-calendar </v-icon>
-        Schedule
-      </v-btn>
+     
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -137,6 +128,7 @@ export default {
     dialog: false,
     dialogDelete: false,
     dialogSchedule: false,
+    editDialog:{dialog:false},
     headers: [
       {
         text: "Employee ID",
@@ -230,7 +222,7 @@ export default {
         })
 
         .then((response) => {
-        //  console.log(response);
+          //  console.log(response);
           const newArr = response.data.data.employee;
           this.desserts = newArr;
           //this.table.loading = false;
@@ -248,31 +240,32 @@ export default {
       //  }
       //});/
       // console.log(item);
-
+ 
       this.approveData = Object.assign({}, item);
 
-      this.dialog = true;
+      this.editDialog.dialog = true;
     },
     SchedItemConfirm() {
-        
       var TToken = localStorage.getItem("token");
-      console.log("token",TToken);
-//this.scheduleItem.date=moment(this.scheduleItem.date).format("MM-DD-YYYY");
-console.log("log",this.scheduleItem.shiftId);
-console.log("log",this.scheduleItem.date);
-console.log("log",this.scheduleItem.employeeId);
-     // this.scheduleItem.employeeId = ;
+      console.log("token", TToken);
+      //this.scheduleItem.date=moment(this.scheduleItem.date).format("MM-DD-YYYY");
+      console.log("log", this.scheduleItem.shiftId);
+      console.log("log", this.scheduleItem.date);
+      console.log("log", this.scheduleItem.employeeId);
+      // this.scheduleItem.employeeId = ;
       // this.desserts.splice(this.editedIndex, 1);
-    
 
- axios
-        .post("http://161.49.63.45:8085/api/admin/schedule",this.scheduleItem, {
-          headers: {
-           Authorization: `Bearer ${this.authToken}`,
-           Accept: "application/json",
-          },
-           
-        })
+      axios
+        .post(
+          "http://161.49.63.45:8085/api/admin/schedule",
+          this.scheduleItem,
+          {
+            headers: {
+              Authorization: `Bearer ${this.authToken}`,
+              Accept: "application/json",
+            },
+          }
+        )
         .then((response) => {
           console.log(response);
           this.dialogSchedule = false;
@@ -287,8 +280,8 @@ console.log("log",this.scheduleItem.employeeId);
       //      editedItemX: Object.assign({}, item)
       //  }
       //});/
-      
-this.scheduleItem.employeeId=item._id;
+
+      this.scheduleItem.employeeId = item._id;
       this.loadShift();
       //this.approveData= Object.assign({}, item);
 
@@ -392,7 +385,7 @@ this.scheduleItem.employeeId=item._id;
             //this.loadingBtn = false;
           });
       }
-      this.close();
+       this.editDialog.dialog = false;
     },
   },
 };

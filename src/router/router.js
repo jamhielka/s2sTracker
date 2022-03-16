@@ -111,6 +111,11 @@ let router = new Router({
                     path: '/schedule',
                     component: () => import('@/views/pages/schedule'),
                 },
+                {
+                    name: 'Scheduling',
+                    path: '/scheduling',
+                    component: () => import('@/views/pages/scheduling'),
+                },
                
             ]
         },

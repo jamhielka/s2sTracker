@@ -95,6 +95,11 @@ export default {
         icon: "mdi-table-column-width",
         to: "/holiday",
       },
+       {
+        title: "Scheduling",
+        icon: "mdi-table-column-width",
+        to: "/Scheduling",
+      },
     ],
   }),
   computed: {
