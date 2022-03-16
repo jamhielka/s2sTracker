@@ -59,7 +59,7 @@ export default {
   data: () => ({
     items: [
       {
-        title: "Dashboard",
+        title: "Scheduling",
         icon: "mdi-view-dashboard",
         to: "/admin",
       },
@@ -95,11 +95,11 @@ export default {
         icon: "mdi-table-column-width",
         to: "/holiday",
       },
-       {
-        title: "Scheduling",
-        icon: "mdi-table-column-width",
-        to: "/Scheduling",
-      },
+      //  {
+      //   title: "Scheduling",
+      //   icon: "mdi-table-column-width",
+      //   to: "/Scheduling",
+      // },
     ],
   }),
   computed: {

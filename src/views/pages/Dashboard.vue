@@ -1,14 +1,17 @@
 <template>
   <div class="admin-schedule">
-    <v-simple-table>
+    <v-simple-table class="SchedTB">
       <template v-slot:default>
         <thead>
-          <th v-for="header in headers" :key="header">{{ header }}</th>
+          <tr>
+            <th v-for="header in headers" :key="header">{{ header }}</th>
+          </tr>
         </thead>
         <tbody>
           <tr v-for="employee in employees" :key="employee._id">
             <td>{{ employee.fullName }}</td>
             <td
+              @click="SetSchedule()"
               v-for="schedule in employee.schedules"
               :key="schedule.scheduleDate"
             >
@@ -22,13 +25,47 @@
         </tbody>
       </template>
     </v-simple-table>
+
+    <ScheduleDialog
+      :data="scheduledData"
+      :dialog="scheduleDialog.dialog"
+      @close="scheduleDialog.dialog = !scheduleDialog.dialog"
+      @SchedItemConfirm="SchedItemConfirm()"
+    ></ScheduleDialog>
   </div>
 </template>
 
+<style scoped>
+table > tbody > tr > td:nth-child(1),
+table > thead > tr > th:nth-child(1) {
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+table > thead > tr > th:nth-child(1) {
+  z-index: 1;
+}
+table > tbody > tr > td:nth-child(1) {
+  border-right: 1px solid rgb(12, 1, 1);
+}
+table > thead > tr > th:nth-child(1) {
+  border-right: 1px solid rgb(12, 1, 1);
+}
+</style>
+
 <script>
+import axios from "axios";
+import ScheduleDialog from "../dialogs/scheduling.vue";
 export default {
+  components: {
+    ScheduleDialog,
+  },
   data: () => ({
     employees: [],
+    scheduledData: {},
+    scheduleDialog: { dialog: false },
   }),
   created() {
     this.getEvents();
@@ -79,6 +116,39 @@ export default {
       }
 
       nativeEvent.stopPropagation();
+    },
+    SetSchedule(item) {
+      this.scheduledData = Object.assign({}, item);
+
+      this.scheduleDialog.dialog = true;
+    },
+    SchedItemConfirm() {
+      var TToken = localStorage.getItem("token");
+      console.log("token", TToken);
+      //this.scheduleItem.date=moment(this.scheduleItem.date).format("MM-DD-YYYY");
+      console.log("log", this.scheduleItem.shiftId);
+      console.log("log", this.scheduleItem.date);
+      console.log("log", this.scheduleItem.employeeId);
+      // this.scheduleItem.employeeId = ;
+      // this.desserts.splice(this.editedIndex, 1);
+
+      axios
+        .post(
+          "http://161.49.63.45:8085/api/admin/schedule",
+          this.scheduleItem,
+          {
+            headers: {
+              Authorization: `Bearer ${this.authToken}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          this.dialogSchedule = false;
+        });
+
+      this.closeSched();
     },
   },
 };
