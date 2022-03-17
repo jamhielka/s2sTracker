@@ -11,7 +11,7 @@
           <tr v-for="employee in employees" :key="employee._id">
             <td>{{ employee.fullName }}</td>
             <td
-              @click="SetSchedule()"
+              @click="SetSchedule(employee)"
               v-for="schedule in employee.schedules"
               :key="schedule.scheduleDate"
             >
@@ -56,7 +56,7 @@ table > thead > tr > th:nth-child(1) {
 </style>
 
 <script>
-import axios from "axios";
+//import axios from "axios";
 import ScheduleDialog from "../dialogs/scheduling.vue";
 export default {
   components: {
@@ -118,38 +118,12 @@ export default {
       nativeEvent.stopPropagation();
     },
     SetSchedule(item) {
+      console.log("Schedule"+Object.assign({}, item));
       this.scheduledData = Object.assign({}, item);
 
       this.scheduleDialog.dialog = true;
     },
-    SchedItemConfirm() {
-      var TToken = localStorage.getItem("token");
-      console.log("token", TToken);
-      //this.scheduleItem.date=moment(this.scheduleItem.date).format("MM-DD-YYYY");
-      console.log("log", this.scheduleItem.shiftId);
-      console.log("log", this.scheduleItem.date);
-      console.log("log", this.scheduleItem.employeeId);
-      // this.scheduleItem.employeeId = ;
-      // this.desserts.splice(this.editedIndex, 1);
-
-      axios
-        .post(
-          "http://161.49.63.45:8085/api/admin/schedule",
-          this.scheduleItem,
-          {
-            headers: {
-              Authorization: `Bearer ${this.authToken}`,
-              Accept: "application/json",
-            },
-          }
-        )
-        .then((response) => {
-          console.log(response);
-          this.dialogSchedule = false;
-        });
-
-      this.closeSched();
-    },
+   
   },
 };
 </script>

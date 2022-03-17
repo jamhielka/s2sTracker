@@ -17,7 +17,7 @@
                 ></v-select>
               </v-col>
 
-              <v-col cols="12">
+              <!-- <v-col cols="12">
                 <v-label for="govPagIbig">Date</v-label>
                 <v-menu
                   v-model="modalScheduleDate"
@@ -42,6 +42,40 @@
                     @input="modalScheduleDate = false"
                   ></v-date-picker>
                 </v-menu>
+              </v-col> -->
+              <v-col cols="12" sm="6" class="mt-0 pt-0">
+                <v-datetime-picker
+                  label="Start Date *"
+                  v-model="scheduleItem.startDate"
+                  :text-field-props="textFieldProps"
+                  :time-picker-props="timeProps"
+                  time-format="HH:mm:ss"
+                >
+                  <template slot="dateIcon">
+                    <v-icon>mdi-calendar-month</v-icon>
+                  </template>
+                  <template slot="timeIcon">
+                    <v-icon>mdi-clock-time-nine-outline</v-icon>
+                  </template>
+                </v-datetime-picker>
+              </v-col>
+
+              <v-col cols="12" sm="6" class="mt-0 pt-0">
+                <v-datetime-picker
+                  label="End Date *"
+                  v-model="scheduleItem.endDate"
+                  :text-field-props="textFieldProps"
+                  :time-picker-props="timeProps"
+                  time-format="HH:mm:ss"
+                  date-format="yyyy-MM-dd"
+                >
+                  <template slot="dateIcon">
+                    <v-icon>mdi-calendar-month</v-icon>
+                  </template>
+                  <template slot="timeIcon">
+                    <v-icon>mdi-clock-time-nine-outline</v-icon>
+                  </template>
+                </v-datetime-picker>
               </v-col>
             </v-row>
           </v-container>
@@ -62,26 +96,40 @@
 
 <script>
 //import moment from "moment";
-
+import axios from "axios";
 export default {
   data: () => ({
+    textFieldProps: {
+      prependIcon: "mdi-calendar-month-outline",
+      rules: [(value) => !!value || "Required."],
+    },
+    timeProps: {
+      useSeconds: true,
+      ampmInTitle: true,
+    },
+
     listShift: [],
     scheduleItem: {
       employeeId: 0,
       shiftId: 0,
-      date: "",
+      startDate: "",
+      endDate: "",
     },
     defaultItem: {
       name: "",
       code: "",
     },
     modalScheduleDate: false,
+    _id: "",
   }),
   props: ["data", "dialog"],
 
   watch: {
     dialog: function () {
-      console.log(this.$props.data);
+      console.log("TAMA", this.$props.data.employeeId);
+      this.loadShift();
+      this.scheduleItem.employeeId = this.$props.data.employeeId;
+
       //   this.Rdata.preferenceNo = this.$props.data.referenceNumber;
       //   console.log(this.Rdata);
       //   this.IData = this.$props.data;
@@ -101,11 +149,7 @@ export default {
     },
   },
 
-
-
   methods: {
-  
-
     loadShift() {
       var TToken = localStorage.getItem("token");
       console.log(TToken);
@@ -130,6 +174,33 @@ export default {
 
     close() {
       this.$emit("close", false);
+    },
+    SchedItemConfirm() {
+     // var TToken = localStorage.getItem("token");
+
+      //this.scheduleItem.date=moment(this.scheduleItem.date).format("MM-DD-YYYY");
+      console.log("log", Object.assign({}, this.scheduleItem));
+
+      // this.scheduleItem.employeeId = ;
+      // this.desserts.splice(this.editedIndex, 1);
+
+      axios
+        .post(
+          "http://161.49.63.45:8085/api/admin/schedule",
+          this.scheduleItem,
+          {
+            headers: {
+              Authorization: `Bearer ${this.authToken}`,
+              Accept: "application/json",
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          alert(response);
+        });
+
+      this.close();
     },
   },
 };
