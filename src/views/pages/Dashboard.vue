@@ -48,13 +48,13 @@
           single-line
           hide-details
         ></v-text-field>
-        <v-spacer></v-spacer>
-        <!-- <v-btn color="primary" class="ml-auto">
+
+        <v-btn color="primary" class="ml-auto">
           <download-csv :data="exportData" :name="`${fileName}.csv`">
             <v-icon dense>mdi-download</v-icon>
             Export
           </download-csv>
-        </v-btn> -->
+        </v-btn>
       </v-card-title>
       <v-data-table
         @click:row="SetSchedule"
@@ -63,8 +63,27 @@
         :headers="headers"
         :items="desserts"
         :search="search"
-        class="elevation-1 mytable"
       >
+        <!-- <template slot-scope="props">
+        <tr>
+          <th>          
+          </th>
+          <th
+            v-for="header in props.headers"
+            :key="header.text"
+            :class="freezeheader"
+          >
+            <v-icon small>arrow_upward</v-icon>
+            {{ header.text }}
+          </th>
+        </tr>
+      </template>
+       <template slot="items" slot-scope="props">
+        <tr>         
+          <td class="text-xs-left headcol">{{ props.item["Employee Name"] }}</td>
+          
+        </tr>
+      </template> -->
       </v-data-table>
     </v-card>
 
@@ -94,6 +113,22 @@
 }
 .table > thead > tr > th:nth-child(1) {
   border-right: 1px solid rgb(12, 1, 1) !important;
+}
+.headcol {
+  position: absolute;
+  width: 30%;
+  left: 0;
+  background: #eee;
+  text-align: center !important;
+  padding-top: 10px !important;
+}
+.fluid-table tr:first-child td {
+  font-weight: bold;
+  background: #fff !important;
+}
+.scrollsettings {
+  margin-left: 30%;
+  width: 800px;
 }
 </style>
 <script>
@@ -154,28 +189,26 @@ export default {
             };
 
             for (var x = 0; x < newSchedules.length; x++) {
+              obj["Working Hours"] = newEmployees[i].summary.workingHours;
+              obj["OT"] = newEmployees[i].summary.ot;
+              obj["Holiday"] = newEmployees[i].summary.holiday;
+              obj["Leave"] = newEmployees[i].summary.leave;
               obj[
                 moment(newSchedules[x]["scheduleDateLabel"]).format(
                   "MM-DD-YYYY"
                 )
               ] = newSchedules[x]["timeLabel"];
-
-              obj["Working Hours"] = newEmployees[i].summary.workingHours;
-              obj["OT"] = newEmployees[i].summary.ot;
-              obj["Holiday"] = newEmployees[i].summary.holiday;
-              obj["Leave"] = newEmployees[i].summary.leave;
             }
 
             //  }
             const merged = Object.assign({}, this.tmp2, obj);
             //console.log(merged);
             this.desserts.push(merged);
-            this.exportData.push(merged);
           }
-
-         this.fileName = `Ibas_materials_${moment(
-                  moment().toDate()
-                ).format("MMM_DD_YYYY")}`;
+          this.exportData = this.desserts;
+          this.fileName = `DRS_${moment(moment().toDate()).format(
+            "MMM_DD_YYYY"
+          )}`;
           console.log(this.desserts);
           // console.log(this.headers);
         })

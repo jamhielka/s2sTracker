@@ -196,8 +196,8 @@ export default {
           }
         )
         .then((response) => {
-          console.log(response);
-          alert(response);
+          console.log(response.data.data);
+          alert("Schedule is successfully Set");
         });
 
       this.close();
