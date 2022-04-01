@@ -97,21 +97,21 @@
 </template>
 
 <style scoped>
-.table > tr > td:nth-child(1),
-.table > thead > tr > th:nth-child(1) {
+table > tr > td:nth-child(1),
+table > thead > tr > th:nth-child(1) {
   position: sticky !important;
   position: -webkit-sticky !important;
   left: 0 !important;
   z-index: 1 !important;
   background: white !important;
 }
-.table > thead > tr > th:nth-child(1) {
+table > thead > tr > th:nth-child(1) {
   z-index: 1 !important;
 }
-.table > tbody > tr > td:nth-child(1) {
+table > tbody > tr > td:nth-child(1) {
   border-right: 1px solid rgb(12, 1, 1) !important;
 }
-.table > thead > tr > th:nth-child(1) {
+table > thead > tr > th:nth-child(1) {
   border-right: 1px solid rgb(12, 1, 1) !important;
 }
 .headcol {
