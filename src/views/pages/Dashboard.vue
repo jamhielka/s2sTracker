@@ -206,7 +206,7 @@ export default {
             this.desserts.push(merged);
           }
           this.exportData = this.desserts;
-          this.fileName = `DRS_${moment(moment().toDate()).format(
+          this.fileName = `Sheduling_${moment(moment().toDate()).format(
             "MMM_DD_YYYY"
           )}`;
           console.log(this.desserts);
