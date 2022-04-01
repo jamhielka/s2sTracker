@@ -663,6 +663,7 @@ export default {
 
   created() {
     this.loadCountry();
+    this.loadProvinces()
     this.loadDesignation();
     this.loadDepartment();
     this.loadStatus();
@@ -673,18 +674,21 @@ export default {
       console.log(this.$props.data);
       var xregion = this.$props.data.region;
       var xprovince = this.$props.data.province;
+  
       var valObj = this.listCountry.filter(function (elem) {
         if (elem.name == xregion) return elem._id;
       });
+
       if (valObj.length > 0) this.selectedRegion = valObj[0]._id;
-
+    console.log(xregion + "|" + valObj[0]._id);
+ 
       this.onChangeCountry();
-
+ 
       var valObjProv = this.listState.filter(function (Xelem) {
         if (Xelem.name == xprovince) return Xelem._id;
       });
       if (valObjProv.length > 0) this.selectedProvince = valObjProv[0]._id;
-
+ console.log(valObjProv);
       console.log(xprovince + "|" + valObjProv[0]._id);
 
       axios
@@ -730,9 +734,23 @@ export default {
           //console.log(this.listCountry);
         });
     },
+    loadProvinces() {
+      axios
+        .get("http://52.220.32.14:10210/api/provinces", {
+          //headers: {
+          // Authorization: `Bearer ${this.authToken}`,
+          // Accept: "application/json",
+          //},
+        })
+        .then((res) => {
+          this.listState = res.data.data.provinces;
+          //console.log(this.listCountry);
+        });
+    },
     onChangeCountry() {
-      console.log("Label: ", this.selectedRegion.name);
-      console.log("Value: ", this.selectedRegion._id);
+    console.log("Label: ", this.selectedRegion.name)
+      console.log("Value: ", this.selectedRegion._id)   
+    
       axios
         .get(
           `http://52.220.32.14:10210/api/provinces?regionId=${this.selectedRegion._id}`,
@@ -849,6 +867,7 @@ export default {
     },
      close() {
       this.$emit("close", false);
+    
     },
   },
 };

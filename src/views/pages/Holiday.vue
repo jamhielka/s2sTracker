@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+    :search="search"
     :headers="headers"
     :items="desserts"
     sort-by="name"
@@ -10,6 +11,13 @@
         <v-toolbar-title>Holiday</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
@@ -52,10 +60,9 @@
                           readonly
                           v-bind="attrs"
                           v-on="on"
-                       
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="editedItem.code" scrollable >
+                      <v-date-picker v-model="editedItem.code" scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="modal = false">
                           Cancel
@@ -113,6 +120,7 @@
 //import moment from "moment";
 export default {
   data: () => ({
+    search: "",
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -142,10 +150,10 @@ export default {
     },
     defaultItem: {
       name: "",
-     // code: "",
+      // code: "",
       date: "",
     },
-     //date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+    //date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     modal: false,
   }),
 
@@ -256,9 +264,9 @@ export default {
     save() {
       var TToken = localStorage.getItem("token");
 
-     // this.editedItem.date=moment(this.editedItem.date,"MM-dd-yyyy"); 
+      // this.editedItem.date=moment(this.editedItem.date,"MM-dd-yyyy");
 
-    console.log( this.editedItem);
+      console.log(this.editedItem);
       if (this.editedIndex > -1) {
         this.$api
           .put("/admin/holidays", this.editedItem, {

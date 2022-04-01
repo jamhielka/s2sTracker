@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+    :search="search"
     :headers="headers"
     :items="desserts"
     sort-by="name"
@@ -11,6 +12,13 @@
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
 
+        <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
         <v-btn to="/addEmployee" color="primary" dark class="mb-2"
           >Add Employee</v-btn
         >
@@ -66,6 +74,7 @@ export default {
     EditDialog,
   },
   data: () => ({
+        search: "",
     approveData: {},
     dialog: false,
     dialogDelete: false,
@@ -184,7 +193,7 @@ export default {
       // console.log(item);
  
       this.approveData = Object.assign({}, item);
-
+console.log(this.approveData);
       this.editDialog.dialog = true;
     },
     SchedItemConfirm() {

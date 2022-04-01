@@ -1,5 +1,7 @@
 <template>
   <v-data-table
+  
+     :search="search"
     :headers="headers"
     :items="desserts"
     sort-by="name"
@@ -10,6 +12,13 @@
         <v-toolbar-title>Shifts</v-toolbar-title>
         <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
+          <v-text-field
+          v-model="search"
+          append-icon="mdi-magnify"
+          label="Search"
+          single-line
+          hide-details
+        ></v-text-field>
         <v-dialog v-model="dialog" max-width="500px" max-height="500px">
           <template v-slot:activator="{ on, attrs }">
             <v-btn color="primary" dark class="mb-2" v-bind="attrs" v-on="on">
@@ -94,6 +103,7 @@ import moment from "moment";
 
 export default {
   data: () => ({
+     search: "",
     dialog: false,
     dialogDelete: false,
     headers: [

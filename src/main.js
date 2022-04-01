@@ -9,6 +9,7 @@ import DatetimePicker from 'vuetify-datetime-picker'
 import ECharts from 'vue-echarts'
 import { use } from 'echarts/core'
 import VueTimepicker from 'vue2-timepicker'
+//import JsonCSV from 'vue-json-csv'
 
 Vue.use(VueTimepicker)
 // import ECharts modules manually to reduce bundle size
@@ -35,7 +36,7 @@ Vue.component('v-chart', ECharts)
 // (Optional) import 'vuetify-datetime-picker/src/stylus/main.styl'
 
 Vue.use(DatetimePicker)
-
+//Vue.component('downloadCsv', JsonCSV)
 
 
 
