@@ -44,7 +44,7 @@
                 </v-menu>
               </v-col> -->
               <v-col cols="12" sm="6" class="mt-0 pt-0">
-                <v-datetime-picker
+                <!-- <v-datetime-picker
                   label="Start Date *"
                   v-model="scheduleItem.startDate"
                   :text-field-props="textFieldProps"
@@ -57,11 +57,13 @@
                   <template slot="timeIcon">
                     <v-icon>mdi-clock-time-nine-outline</v-icon>
                   </template>
-                </v-datetime-picker>
+                </v-datetime-picker> -->
+<label >Start Date *</label>
+                 <input type="datetime-local"   v-model="scheduleItem.startDate" >
               </v-col>
 
               <v-col cols="12" sm="6" class="mt-0 pt-0">
-                <v-datetime-picker
+                <!-- <v-datetime-picker
                   label="End Date *"
                   v-model="scheduleItem.endDate"
                   :text-field-props="textFieldProps"
@@ -75,7 +77,9 @@
                   <template slot="timeIcon">
                     <v-icon>mdi-clock-time-nine-outline</v-icon>
                   </template>
-                </v-datetime-picker>
+                </v-datetime-picker> -->
+                <label >End Date *</label>
+                 <input type="datetime-local"   v-model="scheduleItem.endDate" >
               </v-col>
             </v-row>
           </v-container>
