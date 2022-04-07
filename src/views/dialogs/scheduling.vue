@@ -7,6 +7,10 @@
           <v-container>
             <v-row>
               <v-col cols="12">
+                 <!-- <label for="ID">Employee ID: {{ scheduleItem.employeeId }}</label><br/> -->
+                <label for="Name">Employee Name: {{ scheduleItem.Name }}</label>
+              </v-col>
+              <v-col cols="12">
                 <v-select
                   v-model="scheduleItem.shiftId"
                   :items="listShift"
@@ -58,8 +62,8 @@
                     <v-icon>mdi-clock-time-nine-outline</v-icon>
                   </template>
                 </v-datetime-picker> -->
-<label >Start Date *</label>
-                 <input type="datetime-local"   v-model="scheduleItem.startDate" >
+                <label>Start Date *</label>
+                <input type="datetime-local" v-model="scheduleItem.startDate" />
               </v-col>
 
               <v-col cols="12" sm="6" class="mt-0 pt-0">
@@ -78,8 +82,8 @@
                     <v-icon>mdi-clock-time-nine-outline</v-icon>
                   </template>
                 </v-datetime-picker> -->
-                <label >End Date *</label>
-                 <input type="datetime-local"   v-model="scheduleItem.endDate" >
+                <label>End Date *</label>
+                <input type="datetime-local" v-model="scheduleItem.endDate" />
               </v-col>
             </v-row>
           </v-container>
@@ -118,6 +122,7 @@ export default {
       shiftId: 0,
       startDate: "",
       endDate: "",
+      Name: "",
     },
     defaultItem: {
       name: "",
@@ -130,10 +135,11 @@ export default {
 
   watch: {
     dialog: function () {
-      console.log("TAMA", this.$props.data.employeeId);
+      // console.log(this.$props.data["Employee Name"]
+      // ,this.$props.data.employeeId);
       this.loadShift();
       this.scheduleItem.employeeId = this.$props.data.employeeId;
-
+      this.scheduleItem.Name = this.$props.data["Employee Name"];
       //   this.Rdata.preferenceNo = this.$props.data.referenceNumber;
       //   console.log(this.Rdata);
       //   this.IData = this.$props.data;
@@ -180,7 +186,7 @@ export default {
       this.$emit("close", false);
     },
     SchedItemConfirm() {
-     // var TToken = localStorage.getItem("token");
+      // var TToken = localStorage.getItem("token");
 
       //this.scheduleItem.date=moment(this.scheduleItem.date).format("MM-DD-YYYY");
       console.log("log", Object.assign({}, this.scheduleItem));
