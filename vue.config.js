@@ -5,6 +5,7 @@ module.exports = {
         return args;
       });
     },
-    transpileDependencies: ["vuetify"],
+
+    transpileDependencies: ["vuetify", "sweet-alert-vuetify"],
     publicPath: "/",
   };

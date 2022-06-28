@@ -785,7 +785,14 @@ export default {
           })
           .then((response) => {
             console.log(response);
-            alert("Employee is successfully created");
+            this.$swal("success", {
+              config: {
+                title: {
+                  text: "Employee is successfully created!",
+                },
+              },
+            });
+            //alert("Employee is successfully created");
             this.$router.push({path: '/employee'});
           })
           .catch((e) => {

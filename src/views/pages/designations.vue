@@ -189,7 +189,9 @@ export default {
         .delete("/admin/designations", {
           headers: {
             Authorization: TToken,
-          }},
+          }
+          ,
+            data: {_id:  this.editedItem._id} },
           this.editedItem
         )
         .then((response) => {
@@ -198,7 +200,15 @@ export default {
           // this.loadingBtn = false;
 
           this.dialog = false;
-          alert("Designations is successfully deleted");
+            this.$swal("success", {
+              config: {
+                title: {
+                  text: "Designations is successfully deleted!",
+                },
+              },
+            });
+
+          //alert("Designations is successfully deleted");
         })
         .catch((e) => {
           console.log(e);
@@ -238,7 +248,14 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Designations is successfully edited");
+            //alert("Designations is successfully edited");
+               this.$swal("success", {
+              config: {
+                title: {
+                  text: "Designations is successfully edited!",
+                },
+              },
+            });
           })
           .catch((e) => {
             console.log(e);
@@ -258,7 +275,14 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Designations is successfully created");
+               this.$swal("success", {
+              config: {
+                title: {
+                  text: "Designations is successfully created!",
+                },
+              },
+            });
+            //alert("Designations is successfully created");
             this.initialize()
           })
           .catch((e) => {

@@ -189,7 +189,8 @@ export default {
         .delete("/admin/job-status", {
           headers: {
             Authorization: TToken,
-          }},
+          },
+            data: {_id:  this.editedItem._id} },
           this.editedItem
         )
         .then((response) => {
@@ -198,7 +199,14 @@ export default {
           // this.loadingBtn = false;
 
           this.dialog = false;
-          alert("Job status is successfully deleted");
+            this.$swal("success", {
+              config: {
+                title: {
+                  text: "Job status is successfully deleted!",
+                },
+              },
+            });
+         // alert("Job status is successfully deleted");
         })
         .catch((e) => {
           console.log(e);
@@ -238,7 +246,14 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Job status is successfully edited");
+            //alert("Job status is successfully edited");
+              this.$swal("success", {
+              config: {
+                title: {
+                  text: "Job status is successfully edited!",
+                },
+              },
+            });
           })
           .catch((e) => {
             console.log(e);
@@ -258,7 +273,14 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Job status is successfully created");
+             this.$swal("success", {
+              config: {
+                title: {
+                  text: "Job status is successfully created!",
+                },
+              },
+            });
+           // alert("Job status is successfully created");
             this.initialize()
           })
           .catch((e) => {

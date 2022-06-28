@@ -32,13 +32,13 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12" >
+                  <v-col cols="12">
                     <v-text-field
                       v-model="editedItem.name"
                       label="Name"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" >
+                  <v-col cols="12">
                     <v-text-field
                       v-model="editedItem.code"
                       label="Code"
@@ -86,7 +86,7 @@
 <script>
 export default {
   data: () => ({
-     search: "",
+    search: "",
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -109,12 +109,10 @@ export default {
     desserts: [],
     editedIndex: -1,
     editedItem: {
-    
       name: "",
       code: "",
     },
     defaultItem: {
-    
       name: "",
       code: "",
     },
@@ -166,7 +164,6 @@ export default {
         });
     },
     editItem(item) {
-     
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
 
@@ -174,7 +171,6 @@ export default {
     },
 
     deleteItem(item) {
-    
       this.editedIndex = this.desserts.indexOf(item);
       this.editedItem = Object.assign({}, item);
       console.log(this.editedItem);
@@ -183,13 +179,17 @@ export default {
 
     deleteItemConfirm() {
       var TToken = localStorage.getItem("token");
-   console.log("deleteItemConfirm "+ this.editedItem._item);
+      console.log("deleteItemConfirm " + this.editedItem._item);
       // this.desserts.splice(this.editedIndex, 1);
       this.$api
-        .delete("/admin/departments", {
-          headers: {
-            Authorization: TToken,
-          }},
+        .delete(
+          "/admin/departments",
+          {
+            headers: {
+              Authorization: TToken,
+            },
+            data: { _id: this.editedItem._id },
+          },
           this.editedItem
         )
         .then((response) => {
@@ -198,7 +198,14 @@ export default {
           // this.loadingBtn = false;
 
           this.dialog = false;
-          alert("Department is successfully deleted");
+          this.$swal("success", {
+            config: {
+              title: {
+                text: "Department is successfully deleted!",
+              },
+            },
+          });
+          //alert("Department is successfully deleted");
         })
         .catch((e) => {
           console.log(e);
@@ -238,7 +245,14 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Department is successfully edited");
+            //alert("Department is successfully edited");
+            this.$swal("success", {
+              config: {
+                title: {
+                  text: "Department is successfully edited!",
+                },
+              },
+            });
           })
           .catch((e) => {
             console.log(e);
@@ -258,8 +272,16 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Department is successfully created");
-            this.initialize()
+            this.$swal("success", {
+              config: {
+                title: {
+                  text: "Department is successfully created!",
+                },
+              },
+            });
+
+            //alert("Department is successfully created");
+            this.initialize();
           })
           .catch((e) => {
             console.log(e);

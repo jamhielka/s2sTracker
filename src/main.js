@@ -10,7 +10,9 @@ import ECharts from 'vue-echarts'
 import { use } from 'echarts/core'
 import VueTimepicker from 'vue2-timepicker'
 import JsonCSV from 'vue-json-csv'
+import SweetAlertVuetify from 'sweet-alert-vuetify';
 
+Vue.use(SweetAlertVuetify);
 Vue.use(VueTimepicker)
 // import ECharts modules manually to reduce bundle size
 import {

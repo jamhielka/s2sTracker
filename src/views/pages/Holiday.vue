@@ -242,16 +242,12 @@ export default {
       this.data._id = this.editedItem._id;
       console.log(this.data);
       this.$api
-        .delete(
-          "/admin/holiday", 
-          {
-            headers: {
-              Authorization: TToken
-            },
-            data: {_id:  this.editedItem._id} 
+        .delete("/admin/holiday", {
+          headers: {
+            Authorization: TToken,
           },
-      
-        )
+          data: { _id: this.editedItem._id },
+        })
         .then((response) => {
           console.log(response);
           this.$emit("obj", true);
@@ -259,7 +255,14 @@ export default {
 
           this.dialog = false;
           this.getForMerchantList();
-          alert("Job status is successfully deleted");
+          this.$swal("success", {
+              config: {
+                title: {
+                  text: "Holiday is successfully deleted!",
+                },
+              },
+            });
+          //alert("Job status is successfully deleted");
         })
         .catch((e) => {
           console.log(e);
@@ -303,7 +306,15 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Job status is successfully edited");
+            this.$swal("success", {
+              config: {
+                title: {
+                  text: "Holiday is successfully updated!",
+                },
+              },
+            });
+
+            //alert("Holiday is successfully edited");
           })
           .catch((e) => {
             console.log(e);
@@ -323,7 +334,14 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Job status is successfully created");
+            this.$swal("success", {
+              config: {
+                title: {
+                  text: "Holiday is successfully created!",
+                },
+              },
+            });
+            // alert("Holiday is successfully created");
             this.initialize();
           })
           .catch((e) => {

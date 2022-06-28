@@ -221,6 +221,7 @@ export default {
             headers: {
               Authorization: TToken,
             },
+            data: {_id:  this.editedItem._id} 
           },
           this.editedItem
         )
@@ -230,7 +231,14 @@ export default {
           // this.loadingBtn = false;
 
           this.dialog = false;
-          alert("Shift is successfully deleted");
+          this.$swal("success", {
+              config: {
+                title: {
+                  text: "Shift is successfully deleted!",
+                },
+              },
+            });
+         // alert("Shift is successfully deleted");
         })
         .catch((e) => {
           console.log(e);
@@ -270,7 +278,14 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Shift is successfully edited");
+                this.$swal("success", {
+              config: {
+                title: {
+                  text: "Shift is successfully edited!",
+                },
+              },
+            });
+            //alert("Shift is successfully edited");
           })
           .catch((e) => {
             console.log(e);
@@ -290,7 +305,14 @@ export default {
             // this.loadingBtn = false;
 
             this.dialog = false;
-            alert("Shift is successfully created");
+            //alert("Shift is successfully created");
+              this.$swal("success", {
+              config: {
+                title: {
+                  text: "Shift is successfully created!",
+                },
+              },
+            });
             this.initialize();
           })
           .catch((e) => {
