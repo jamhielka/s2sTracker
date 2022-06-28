@@ -396,6 +396,30 @@
               ></v-select>
             </div>
           </v-col>
+            <v-col cols="3">
+            <div class="form-group">
+              <v-label >Supervisor</v-label>
+
+             <v-checkbox
+      v-model="editedItem.isSupervisor"
+      :label="`Supervisor: ${editedItem.isSupervisor.toString()}`"
+    ></v-checkbox>
+            </div>
+          </v-col>
+           <v-col cols="4">
+            <div class="form-group">
+              <v-label for="prevEmpStatus"> Supervisor</v-label>
+
+              <v-select
+                v-model="editedItem.supervisorId"
+                :items="listSupervisor"
+                 :item-text="getFieldText"
+                item-value="_id"
+                label="Enter your  Supervisor"
+                required
+              ></v-select>
+            </div>
+          </v-col>
         </v-row>
       </div>
     </tab-content>
@@ -519,6 +543,7 @@
               ></v-select>
             </div>
           </v-col>
+           
           <v-col cols="4">
             <div class="form-group">
               <v-label for="prevDateSeparated"> Date Separated</v-label>
@@ -642,6 +667,8 @@ export default {
           dateSeparated: "",
           notes: "",
         },
+        isSupervisor:false,
+        supervisorId:"",
       },
       listCountry: [],
       listState: [],
@@ -649,6 +676,7 @@ export default {
       listDepartments: [],
       listDesignations: [],
       listStatus: [],
+      listSupervisor:[],
       date: null,
       modalbirthday: false,
       modaldateOfJoining: false,
@@ -667,6 +695,7 @@ export default {
     this.loadDesignation();
     this.loadDepartment();
     this.loadStatus();
+    this.loadSupervisor();
   },
 
   watch: {
@@ -721,6 +750,10 @@ export default {
     },
   },
   methods: {
+     getFieldText (item)
+  {
+    return `${item.firstName} - ${item.lastName}`
+  },
     loadCountry() {
       axios
         .get("http://52.220.32.14:10210/api/regions", {
@@ -845,10 +878,31 @@ export default {
           console.log(e);
         });
     },
+    loadSupervisor() {
+      var TToken = localStorage.getItem("token");
+
+      this.$api
+        .get("/admin/employee?isSupervisor=true", {
+          headers: {
+            Authorization: TToken,
+          },
+        })
+
+        .then((response) => {
+          this.listSupervisor = response.data.data.employee;
+console.log("MALI"+ response.data.data.employee);
+          //this.table.loading = false;
+        })
+        .catch((e) => {
+          //this.table.loading = false;
+          console.log(e);
+        });
+    },
+
     onComplete() {
       var TToken = localStorage.getItem("token");
       console.log(JSON.stringify(this.editedItem));
-
+this.editedItem.supervisorId=this.editedItem._id;
       this.$api
         .put("/admin/employee", this.editedItem, {
           headers: {

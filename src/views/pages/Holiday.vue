@@ -38,6 +38,14 @@
                       label="Name"
                     ></v-text-field>
                   </v-col>
+                  <v-col cols="8" class="mt-0 pt-0">
+                    <v-select
+                      :items="type"
+                      label="Type: *"
+                      :rules="rules.required"
+                      v-model="editedItem.type"
+                    ></v-select>
+                  </v-col>
                   <!--<v-col cols="12">
                     <v-text-field
                       v-model="editedItem.code"
@@ -48,13 +56,13 @@
                     <v-dialog
                       ref="dialog"
                       v-model="modal"
-                      :return-value.sync="editedItem.code"
+                      :return-value.sync="editedItem.date"
                       persistent
                       width="290px"
                     >
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
-                          v-model="editedItem.code"
+                          v-model="editedItem.date"
                           label="Date"
                           prepend-icon="mdi-calendar"
                           readonly
@@ -62,7 +70,7 @@
                           v-on="on"
                         ></v-text-field>
                       </template>
-                      <v-date-picker v-model="editedItem.code" scrollable>
+                      <v-date-picker v-model="editedItem.date" scrollable>
                         <v-spacer></v-spacer>
                         <v-btn text color="primary" @click="modal = false">
                           Cancel
@@ -70,7 +78,7 @@
                         <v-btn
                           text
                           color="primary"
-                          @click="$refs.dialog.save(editedItem.code)"
+                          @click="$refs.dialog.save(editedItem.date)"
                         >
                           OK
                         </v-btn>
@@ -120,6 +128,7 @@
 //import moment from "moment";
 export default {
   data: () => ({
+    type: ["regular", "special", "non-working"],
     search: "",
     dialog: false,
     dialogDelete: false,
@@ -144,14 +153,24 @@ export default {
     desserts: [],
     editedIndex: -1,
     editedItem: {
+      _id: "",
       name: "",
-      //code: "",
+      code: "",
       date: "",
+      type: "",
+    },
+    data: {
+      _id: "",
     },
     defaultItem: {
+      _id: "",
       name: "",
-      // code: "",
+      code: "",
       date: "",
+      type: "",
+    },
+    rules: {
+      required: [(value) => !!value || "Required."],
     },
     //date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     modal: false,
@@ -218,17 +237,19 @@ export default {
 
     deleteItemConfirm() {
       var TToken = localStorage.getItem("token");
-      console.log("deleteItemConfirm " + this.editedItem._item);
+      console.log("deleteItemConfirm " + this.editedItem._id);
       // this.desserts.splice(this.editedIndex, 1);
+      this.data._id = this.editedItem._id;
+      console.log(this.data);
       this.$api
         .delete(
           "/admin/holiday",
           {
             headers: {
-              Authorization: TToken,
+              Authorization: TToken
             },
           },
-          this.editedItem
+         this.data
         )
         .then((response) => {
           console.log(response);

@@ -7,7 +7,7 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                 <!-- <label for="ID">Employee ID: {{ scheduleItem.employeeId }}</label><br/> -->
+                <!-- <label for="ID">Employee ID: {{ scheduleItem.employeeId }}</label><br/> -->
                 <label for="Name">Employee Name: {{ scheduleItem.Name }}</label>
               </v-col>
               <v-col cols="12">
@@ -94,7 +94,7 @@
           <v-btn color="blue darken-1" text @click="SchedItemConfirm()"
             >OK</v-btn
           >
-
+ 
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -103,8 +103,9 @@
 </template>
 
 <script>
-//import moment from "moment";
+import moment from "moment";
 import axios from "axios";
+//import moment from "moment";
 export default {
   data: () => ({
     textFieldProps: {
@@ -189,8 +190,12 @@ export default {
       // var TToken = localStorage.getItem("token");
 
       //this.scheduleItem.date=moment(this.scheduleItem.date).format("MM-DD-YYYY");
-      console.log("log", Object.assign({}, this.scheduleItem));
-
+  
+   console.log(moment(this.scheduleItem.startDate).format("MM-DD-YYYY HH:mm:ss"));
+  console.log(moment(this.scheduleItem.endDate).format("MM-DD-YYYY HH:mm:ss"));
+   this.scheduleItem.startDate=moment(this.scheduleItem.startDate).format("MM-DD-YYYY HH:mm:ss");
+  this.scheduleItem.endDate=moment(this.scheduleItem.endDate).format("MM-DD-YYYY HH:mm:ss");
+          console.log("log", Object.assign({}, this.scheduleItem));
       // this.scheduleItem.employeeId = ;
       // this.desserts.splice(this.editedIndex, 1);
 
@@ -207,6 +212,7 @@ export default {
         )
         .then((response) => {
           console.log(response.data.data);
+        
           alert("Schedule is successfully Set");
         });
 
