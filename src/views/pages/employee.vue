@@ -244,11 +244,12 @@ console.log(this.approveData);
       this.editedItem = Object.assign({}, item);
       console.log(this.editedItem);
       this.dialogDelete = true;
+        this.editDialog.dialog = false;
     },
 
     deleteItemConfirm() {
       var TToken = localStorage.getItem("token");
-      console.log("deleteItemConfirm " + this.editedItem._item);
+      console.log("deleteItemConfirm " + this.editedItem._id);
       // this.desserts.splice(this.editedIndex, 1);
       this.$api
         .delete(
@@ -257,6 +258,8 @@ console.log(this.approveData);
             headers: {
               Authorization: TToken,
             },
+            
+            data: {_id:  this.editedItem._id} 
           },
           this.editedItem
         )

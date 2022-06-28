@@ -243,13 +243,14 @@ export default {
       console.log(this.data);
       this.$api
         .delete(
-          "/admin/holiday",
+          "/admin/holiday", 
           {
             headers: {
               Authorization: TToken
             },
+            data: {_id:  this.editedItem._id} 
           },
-         this.data
+      
         )
         .then((response) => {
           console.log(response);
@@ -257,6 +258,7 @@ export default {
           // this.loadingBtn = false;
 
           this.dialog = false;
+          this.getForMerchantList();
           alert("Job status is successfully deleted");
         })
         .catch((e) => {
