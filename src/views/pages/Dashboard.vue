@@ -40,14 +40,47 @@
     <v-card>
       <v-card-title>
         Scheduling
+        <!-- {{dates}} -->
         <v-spacer></v-spacer>
-        <v-text-field
-          v-model="search"
-          append-icon="mdi-magnify"
-          label="Search"
-          single-line
-          hide-details
-        ></v-text-field>
+        <v-row>
+          <v-col>
+            <v-menu
+              v-model="menu2"
+              :close-on-content-click="false"
+              :nudge-right="40"
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="dates"
+                  label="Select Date"
+                  prepend-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  v-on="on"
+                 
+                ></v-text-field>
+              </template>
+
+              <v-date-picker
+                v-model="dates"
+                @input="menu2 = false"
+                range
+              ></v-date-picker>
+            </v-menu>
+          </v-col>
+          <v-col>
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-col>
+        </v-row>
 
         <v-btn color="primary" class="ml-auto">
           <download-csv :data="exportData" :name="`${fileName}.csv`">
@@ -148,74 +181,155 @@ export default {
     desserts: [],
     exportData: [],
     fileName: "",
+    menu2: false,
+    dates: [],
   }),
   created() {
     this.getEvents();
+   // this.dates.join(" ~ ");
+  },
+  watch: {
+    dates() {
+      console.log(this.dates[0]);
+      console.log(this.dates[1]);
+         this.headers=[];
+      this.desserts=[];
+this.getEvents();
+      //return this.dates.join(" ~ ");
+    },
   },
   methods: {
     getEvents() {
       //API
+   
 
       var TToken = localStorage.getItem("token");
-      ///console.log(TToken);
-      this.$api
-        .get("admin/schedule", {
-          headers: {
-            Authorization: TToken,
-          },
-        })
+      let Tdate = this.dates.length;
+      console.log("MALI:"+ Tdate);
+      if (Tdate >= 2) {
+        ///console.log(TToken);
 
-        .then((response) => {
-          console.log("data", response.data);
-          //this.employees = response.data.data.employees;
-          const newEmployees = response.data.data.employees;
-          const newHeaders = response.data.data.headers;
+        var From = this.dates[0];
+        var To = this.dates[1];
+        this.$api
+          .get("admin/schedule?From=" + From + "&To=" + To, {
+            headers: {
+              Authorization: TToken,
+            },
+          })
 
-          var obj = {};
-          //HEADERS TABLE
-          for (var y = 0; y < newHeaders.length; y++) {
-            this.tmp = {
-              text: newHeaders[y],
-              value: newHeaders[y],
-            };
-            this.headers.push(this.tmp);
-          }
-          //HEADERS TABLE
-          for (var i = 0; i < newEmployees.length; i++) {
-            const newSchedules = newEmployees[i].schedules;
-            this.tmp2 = {
-              employeeId: newEmployees[i].employeeId,
-              "Employee Name": newEmployees[i].fullName,
-            };
+          .then((response) => {
+            console.log("data", response.data);
+            //this.employees = response.data.data.employees;
+            const newEmployees = response.data.data.employees;
+            const newHeaders = response.data.data.headers;
 
-            for (var x = 0; x < newSchedules.length; x++) {
-              obj["Working Hours"] = newEmployees[i].summary.workingHours;
-              obj["OT"] = newEmployees[i].summary.ot;
-              obj["Holiday"] = newEmployees[i].summary.holiday;
-              obj["Leave"] = newEmployees[i].summary.leave;
-              obj[
-                moment(newSchedules[x]["scheduleDateLabel"]).format(
-                  "MM-DD-YYYY"
-                )
-              ] = newSchedules[x]["timeLabel"];
+            var obj = {};
+            //HEADERS TABLE
+            for (var y = 0; y < newHeaders.length; y++) {
+              this.tmp = {
+                text: newHeaders[y],
+                value: newHeaders[y],
+              };
+              this.headers.push(this.tmp);
             }
+            //HEADERS TABLE
+            for (var i = 0; i < newEmployees.length; i++) {
+              const newSchedules = newEmployees[i].schedules;
+              this.tmp2 = {
+                employeeId: newEmployees[i].employeeId,
+                "Employee Name": newEmployees[i].fullName,
+              };
 
-            //  }
-            const merged = Object.assign({}, this.tmp2, obj);
-            //console.log(merged);
-            this.desserts.push(merged);
-          }
-          this.exportData = this.desserts;
-          this.fileName = `Sheduling_${moment(moment().toDate()).format(
-            "MMM_DD_YYYY"
-          )}`;
-          console.log(this.desserts);
-          // console.log(this.headers);
-        })
-        .catch((e) => {
-          //this.table.loading = false;
-          console.log(e);
-        });
+              for (var x = 0; x < newSchedules.length; x++) {
+                obj["Working Hours"] = newEmployees[i].summary.workingHours;
+                obj["OT"] = newEmployees[i].summary.ot;
+                obj["Holiday"] = newEmployees[i].summary.holiday;
+                obj["Leave"] = newEmployees[i].summary.leave;
+                obj[
+                  moment(newSchedules[x]["scheduleDateLabel"]).format(
+                    "MM-DD-YYYY"
+                  )
+                ] = newSchedules[x]["timeLabel"];
+              }
+
+              //  }
+              const merged2 = Object.assign({}, this.tmp2, obj);
+              //console.log(merged);
+              this.desserts.push(merged2);
+            }
+            this.exportData = this.desserts;
+            this.fileName = `Sheduling_${moment(moment().toDate()).format(
+              "MMM_DD_YYYY"
+            )}`;
+            console.log(this.desserts);
+            // console.log(this.headers);
+          })
+          .catch((e) => {
+            //this.table.loading = false;
+            console.log(e);
+          });
+      } else {
+        ///console.log(TToken);
+        this.$api
+          .get("admin/schedule", {
+            headers: {
+              Authorization: TToken,
+            },
+          })
+
+          .then((response) => {
+            console.log("data", response.data);
+            //this.employees = response.data.data.employees;
+            const newEmployees = response.data.data.employees;
+            const newHeaders = response.data.data.headers;
+
+            var obj = {};
+            //HEADERS TABLE
+            for (var y = 0; y < newHeaders.length; y++) {
+              this.tmp = {
+                text: newHeaders[y],
+                value: newHeaders[y],
+              };
+              this.headers.push(this.tmp);
+            }
+            //HEADERS TABLE
+            for (var i = 0; i < newEmployees.length; i++) {
+              const newSchedules = newEmployees[i].schedules;
+              this.tmp2 = {
+                employeeId: newEmployees[i].employeeId,
+                "Employee Name": newEmployees[i].fullName,
+              };
+
+              for (var x = 0; x < newSchedules.length; x++) {
+                obj["Working Hours"] = newEmployees[i].summary.workingHours;
+                obj["OT"] = newEmployees[i].summary.ot;
+                obj["Holiday"] = newEmployees[i].summary.holiday;
+                obj["Leave"] = newEmployees[i].summary.leave;
+                obj[
+                  moment(newSchedules[x]["scheduleDateLabel"]).format(
+                    "MM-DD-YYYY"
+                  )
+                ] = newSchedules[x]["timeLabel"];
+              }
+
+              //  }
+              const merged = Object.assign({}, this.tmp2, obj);
+              //console.log(merged);
+              this.desserts.push(merged);
+            }
+            this.exportData = this.desserts;
+            this.fileName = `Sheduling_${moment(moment().toDate()).format(
+              "MMM_DD_YYYY"
+            )}`;
+            console.log(this.desserts);
+            // console.log(this.headers);
+          })
+          .catch((e) => {
+            //this.table.loading = false;
+            console.log(e);
+          });
+      }
     },
     getEventColor(event) {
       return event.color;
@@ -246,6 +360,10 @@ export default {
       this.scheduledData = Object.assign({}, item);
 
       this.scheduleDialog.dialog = true;
+    },
+
+    SendRange() {
+      this.getEvents();
     },
   },
 };
